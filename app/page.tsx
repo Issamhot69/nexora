@@ -109,6 +109,10 @@ export default function Home() {
         <button onClick={() => setView('projects')} className={`flex items-center gap-2 p-3 rounded-xl text-left text-sm font-medium ${view === 'projects' ? 'bg-indigo-600' : 'hover:bg-gray-800 text-gray-400'}`}>📁 Mes Projets ({projects.length})</button>
         <div className="text-xs text-gray-600 px-2 mt-2 mb-1">OUTILS</div>
         <Link href="/launch" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">🚀 Launch in 5min</Link>
+        <Link href="/roadmap" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">🗺️ Roadmap</Link>
+        <Link href="/legal" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">⚖️ Juridique</Link>
+        <Link href="/recruit" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">👥 Recrutement</Link>
+        <Link href="/codegen" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">💻 Code Generator</Link>
         <Link href="/cofounder" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">🤖 AI Co-Founder</Link>
         <Link href="/multilang" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">🌍 Multi-langues</Link>
         <Link href="/store" className="flex items-center gap-2 p-3 rounded-xl text-sm font-medium hover:bg-gray-800 text-gray-400">🏪 App Store</Link>
