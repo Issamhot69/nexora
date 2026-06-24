@@ -35,9 +35,10 @@ export default function ImageGen() {
     const selectedStyle = styles.find(s => s.id === style)?.prompt || ''
     const fullPrompt = encodeURIComponent(`${prompt}, ${selectedStyle}`)
 
-    const seeds = Array.from({ length: count }, () => Math.floor(Math.random() * 99999))
-    const newImages = seeds.map(seed => ({
-      url: `https://image.pollinations.ai/prompt/${fullPrompt}?width=1024&height=768&seed=${seed}&nologo=true&enhance=true`,
+    const seeds = Array.from({ length: count }, (_, i) => Math.floor(Math.random() * 10000) + i * 10000)
+    const variations = ['photorealistic', 'digital art style', 'cinematic dramatic', 'artistic painting']
+    const newImages = seeds.map((seed, i) => ({
+      url: `https://image.pollinations.ai/prompt/${encodeURIComponent(`${prompt}, ${variations[i % variations.length]}, ${selectedStyle}`)}?width=1024&height=768&seed=${seed}&nologo=true&enhance=true`,
       loaded: false
     }))
 

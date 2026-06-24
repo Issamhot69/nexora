@@ -21,6 +21,7 @@ const menuGroups = [
     label: '🌐 Création de Sites',
     items: [
       { href: '/imagegen', icon: '🎨', label: 'Image Generator' },
+      { href: '/logo', icon: '✨', label: 'Logo Generator' },
       { href: '/sitebuilder', icon: '🌐', label: 'Site Builder' },
       { href: '/siteeditor', icon: '✏️', label: 'Site Editor' },
       { href: '/styles', icon: '🎨', label: 'Style AI' },
