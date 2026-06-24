@@ -26,6 +26,7 @@ const menuItems = [
   { href: '/whitelabel', icon: '🏷️', label: 'White Label' },
   { href: '/pricing', icon: '💳', label: 'Pricing' },
   { href: '/auth', icon: '👤', label: 'Mon compte' },
+  { href: '/onboarding', icon: '🎯', label: 'Guide démarrage' },
 ]
 
 export default function Sidebar() {
