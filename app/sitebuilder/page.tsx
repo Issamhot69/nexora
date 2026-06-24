@@ -16,37 +16,57 @@ const colors = [
   { id: 'gradient', label: '🌈 Gradient', desc: 'Dégradé coloré' },
 ]
 
+const bgImages = [
+  { id: 'none', label: '⬛ Couleur pure', url: '' },
+  { id: 'city', label: '🌆 Ville', url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=80' },
+  { id: 'ocean', label: '🌊 Océan', url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&q=80' },
+  { id: 'mountain', label: '🏔️ Montagne', url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80' },
+  { id: 'office', label: '💼 Bureau', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80' },
+  { id: 'tech', label: '💻 Tech', url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80' },
+  { id: 'food', label: '🍽️ Food', url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80' },
+  { id: 'nature', label: '🌿 Nature', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80' },
+  { id: 'space', label: '🚀 Espace', url: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80' },
+  { id: 'abstract', label: '🎨 Abstrait', url: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=1920&q=80' },
+  { id: 'people', label: '👥 Personnes', url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80' },
+  { id: 'custom', label: '📤 Upload', url: 'custom' },
+]
+
 export default function SiteBuilder() {
   const [prompt, setPrompt] = useState('')
   const [template, setTemplate] = useState('startup')
   const [color, setColor] = useState('dark')
+  const [bgImage, setBgImage] = useState('none')
+  const [customBg, setCustomBg] = useState('')
   const [html, setHtml] = useState('')
   const [loading, setLoading] = useState(false)
   const [view, setView] = useState<'preview' | 'code'>('preview')
   const [deployed, setDeployed] = useState(false)
   const [deployedUrl, setDeployedUrl] = useState('')
 
+  const handleCustomBg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => setCustomBg(reader.result as string)
+    reader.readAsDataURL(file)
+  }
+
   const generate = async () => {
     if (!prompt.trim()) return
     setLoading(true)
     setHtml('')
     setDeployed(false)
-    let full = ''
 
-    const enhancedPrompt = `Startup: ${prompt}
-Template: ${templates.find(t => t.id === template)?.name}
-Style: ${color} theme
-Génère un site web HTML complet et professionnel pour cette startup.`
+    const selectedBg = bgImage === 'custom' ? customBg : bgImages.find(b => b.id === bgImage)?.url || ''
 
     try {
       const res = await fetch('/api/sitegenerate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: enhancedPrompt, template, color })
+        body: JSON.stringify({ prompt, template, color, bgImage: selectedBg })
       })
       const data = await res.json()
-      full = data.html || '<h1>Erreur</h1>'
-      setHtml(full)
+      setHtml(data.html || '<h1>Erreur</h1>')
     } catch { setHtml('<h1>Erreur de génération</h1>') }
     setLoading(false)
   }
@@ -58,38 +78,19 @@ Génère un site web HTML complet et professionnel pour cette startup.`
     a.href = url
     a.download = `${prompt.slice(0, 20).replace(/\s/g, '-')}-nexoro.html`
     a.click()
-    URL.revokeObjectURL(url)
   }
 
-  const downloadZIP = async () => {
-    const files = {
-      'index.html': html,
-      'README.md': `# Site généré par Nexoro\n\nStartup: ${prompt}\nGénéré le: ${new Date().toLocaleDateString('fr-FR')}\n\nNexora AI — nexora-puce-eight.vercel.app`,
-    }
-    const content = Object.entries(files).map(([name, content]) => `=== ${name} ===\n${content}`).join('\n\n')
-    const blob = new Blob([content], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'site-nexoro.zip'
-    a.click()
-  }
-
-  const simulateDeploy = async () => {
+  const deploy = async () => {
     setDeployed(false)
     try {
       const res = await fetch('/api/deploy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html, siteName: prompt.slice(0,20) || 'my-site' })
+        body: JSON.stringify({ html, siteName: prompt.slice(0, 20) || 'my-site' })
       })
       const data = await res.json()
-      if (data.url) {
-        setDeployedUrl(data.url)
-        setDeployed(true)
-      }
+      if (data.url) { setDeployedUrl(data.url); setDeployed(true) }
     } catch {
-      // Fallback simulation
       await new Promise(r => setTimeout(r, 2000))
       setDeployedUrl('https://my-site-nexoro.vercel.app')
       setDeployed(true)
@@ -116,18 +117,8 @@ Génère un site web HTML complet et professionnel pour cette startup.`
           </div>
           {html && (
             <div className="flex gap-2 flex-wrap">
-              <button onClick={downloadHTML}
-                className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-xl transition-all text-sm">
-                📥 HTML
-              </button>
-              <button onClick={downloadZIP}
-                className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-xl transition-all text-sm">
-                📦 ZIP
-              </button>
-              <button onClick={simulateDeploy}
-                className="bg-green-600 hover:bg-green-500 text-white font-semibold py-2 px-4 rounded-xl transition-all text-sm">
-                {deployed ? '✅ Déployé !' : '🚀 Déployer'}
-              </button>
+              <button onClick={downloadHTML} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-xl text-sm">📥 HTML</button>
+              <button onClick={deploy} className="bg-green-600 hover:bg-green-500 text-white font-semibold py-2 px-4 rounded-xl text-sm">🚀 Déployer</button>
             </div>
           )}
         </div>
@@ -136,18 +127,15 @@ Génère un site web HTML complet et professionnel pour cette startup.`
           <div className="bg-green-900/20 border border-green-700 rounded-2xl p-4 flex items-center gap-3">
             <span className="text-2xl">🎉</span>
             <div className="flex-1">
-              <p className="font-semibold text-green-400">Site déployé avec succès !</p>
+              <p className="font-semibold text-green-400">Site déployé !</p>
               <a href={deployedUrl} target="_blank" className="text-green-500 text-sm underline">{deployedUrl}</a>
             </div>
-            <a href={deployedUrl} target="_blank"
-              className="bg-green-600 hover:bg-green-500 text-white text-xs py-1.5 px-4 rounded-xl">
-              Voir →
-            </a>
+            <a href={deployedUrl} target="_blank" className="bg-green-600 hover:bg-green-500 text-white text-xs py-1.5 px-4 rounded-xl">Voir →</a>
           </div>
         )}
 
-        {/* Config */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Template */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
             <h2 className="text-sm font-medium text-gray-400 mb-4">Template</h2>
             <div className="grid grid-cols-2 gap-2">
@@ -164,13 +152,14 @@ Génère un site web HTML complet et professionnel pour cette startup.`
             </div>
           </div>
 
+          {/* Style */}
           <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-            <h2 className="text-sm font-medium text-gray-400 mb-4">Style</h2>
+            <h2 className="text-sm font-medium text-gray-400 mb-4">Style texte</h2>
             <div className="space-y-2 mb-4">
               {colors.map(c => (
                 <button key={c.id} onClick={() => setColor(c.id)}
                   className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all text-left ${color === c.id ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}>
-                  <span className="text-lg">{c.label}</span>
+                  <span>{c.label}</span>
                   <span className="text-xs opacity-60">{c.desc}</span>
                 </button>
               ))}
@@ -178,14 +167,52 @@ Génère un site web HTML complet et professionnel pour cette startup.`
           </div>
         </div>
 
+        {/* Image de fond */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+          <h2 className="text-sm font-medium text-gray-400 mb-4">🖼️ Image de fond (au choix)</h2>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+            {bgImages.map(bg => (
+              <button key={bg.id} onClick={() => setBgImage(bg.id)}
+                className={`relative rounded-xl overflow-hidden h-20 transition-all ${bgImage === bg.id ? 'ring-2 ring-indigo-500 scale-105' : 'hover:scale-105'}`}>
+                {bg.url && bg.url !== 'custom' ? (
+                  <img src={bg.url} alt={bg.label} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                    <span className="text-2xl">{bg.id === 'none' ? '⬛' : '📤'}</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-black/40 flex items-end p-1">
+                  <span className="text-white text-xs font-semibold w-full text-center">{bg.label}</span>
+                </div>
+                {bgImage === bg.id && (
+                  <div className="absolute top-1 right-1 w-5 h-5 bg-indigo-500 rounded-full flex items-center justify-center text-xs">✓</div>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {bgImage === 'custom' && (
+            <div className="mt-4">
+              <label className="flex items-center gap-3 bg-gray-800 border border-dashed border-gray-600 rounded-xl p-4 cursor-pointer hover:border-indigo-500 transition-all">
+                {customBg ? (
+                  <img src={customBg} alt="bg" className="h-16 w-32 object-cover rounded-lg" />
+                ) : (
+                  <span className="text-gray-400 text-sm">📤 Upload ton image de fond (JPG, PNG)</span>
+                )}
+                <input type="file" accept="image/*" className="hidden" onChange={handleCustomBg} />
+              </label>
+            </div>
+          )}
+        </div>
+
         {/* Prompt */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
           <textarea value={prompt} onChange={e => setPrompt(e.target.value)}
-            placeholder="Décris ta startup — Ex: FastFoodGenie, plateforme IA pour restaurants fast food, couleurs rouge et noir, style moderne..."
+            placeholder="Décris ta startup — Ex: FastFoodGenie, plateforme IA pour restaurants, couleurs rouge et noir..."
             className="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 resize-none h-24 focus:outline-none focus:border-indigo-500" />
           <button onClick={generate} disabled={loading || !prompt.trim()}
             className="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-all text-lg">
-            {loading ? '⏳ Génération du site...' : '🌐 Générer mon site complet'}
+            {loading ? '⏳ Génération...' : '🌐 Générer mon site avec ce fond'}
           </button>
         </div>
 
@@ -209,16 +236,11 @@ Génère un site web HTML complet et professionnel pour cette startup.`
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium ${view === 'code' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:bg-gray-800'}`}>
                 💻 Code
               </button>
-              {loading && <span className="text-indigo-400 text-xs animate-pulse">Génération...</span>}
             </div>
-
             {view === 'preview' ? (
-              <iframe srcDoc={cleanHtml} className="w-full h-[700px] bg-white"
-                sandbox="allow-scripts allow-same-origin" title="Site Preview" />
+              <iframe srcDoc={cleanHtml} className="w-full h-[700px] bg-white" sandbox="allow-scripts allow-same-origin" title="Preview" />
             ) : (
-              <pre className="p-6 text-green-400 text-xs overflow-auto h-[700px] font-mono leading-relaxed">
-                {html}
-              </pre>
+              <pre className="p-6 text-green-400 text-xs overflow-auto h-[700px] font-mono">{html}</pre>
             )}
           </div>
         )}

@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { prompt, template, color } = await req.json()
+  const { prompt, template, color, bgImage } = await req.json()
 
   // Étape 1: Groq génère le contenu JSON
   const contentRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -85,6 +85,17 @@ Return ONLY this JSON structure:
     }
   }
 
+  // Images de fond gratuites Unsplash selon le template
+  const bgImages: Record<string, string> = {
+    restaurant: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80',
+    saas: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1920&q=80',
+    agency: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80',
+    ecommerce: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1920&q=80',
+    startup: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1920&q=80',
+    portfolio: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80',
+  }
+  const bgImage = bgImages[template] || bgImages.startup
+
   const isDark = color === 'dark'
   const isGradient = color === 'gradient'
   
@@ -108,7 +119,7 @@ nav { background: ${navBg}; padding: 1rem 2rem; display: flex; justify-content: 
 .nav-links a { color: ${text}; text-decoration: none; font-weight: 500; transition: color 0.3s; }
 .nav-links a:hover { color: ${content.color1}; }
 .nav-cta { background: linear-gradient(135deg, ${content.color1}, ${content.color2}); color: white !important; padding: 0.5rem 1.5rem; border-radius: 50px; font-weight: 600; }
-.hero { min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; background: ${isGradient ? `linear-gradient(135deg, ${content.color1}22, ${content.color2}22)` : isDark ? `linear-gradient(135deg, #0f0f0f, #1a1a2e)` : `linear-gradient(135deg, #f8f9ff, #ffffff)`}; position: relative; overflow: hidden; }
+.hero { min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; background: ${bgImage ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${bgImage}') center/cover no-repeat fixed` : isDark ? 'linear-gradient(135deg, #0f0f0f, #1a1a2e)' : isGradient ? `linear-gradient(135deg, ${content.color1}22, ${content.color2}22)` : 'linear-gradient(135deg, #f8f9ff, #ffffff)'}; position: relative; overflow: hidden; }
 .hero::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: ${content.color1}15; top: -200px; right: -200px; }
 .hero::after { content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%; background: ${content.color2}15; bottom: -100px; left: -100px; }
 .hero-content { position: relative; z-index: 1; max-width: 800px; }
