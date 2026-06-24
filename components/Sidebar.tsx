@@ -9,6 +9,7 @@ const menuItems = [
   { href: '/matching', icon: '🤝', label: 'Co-Founder Match' },
   { href: '/revenue', icon: '💰', label: 'Revenue Predictor' },
   { href: '/competitor', icon: '🔮', label: 'Competitor Killer' },
+  { href: '/sitebuilder', icon: '🌐', label: 'Site Builder' },
   { href: '/launch', icon: '🚀', label: 'Launch in 5min' },
   { href: '/cofounder', icon: '🤖', label: 'AI Co-Founder' },
   { href: '/codegen', icon: '💻', label: 'Code Generator' },
