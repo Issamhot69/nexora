@@ -5,6 +5,10 @@ import { usePathname } from 'next/navigation'
 
 const menuItems = [
   { href: '/', icon: '⚡', label: 'Générer' },
+  { href: '/dna', icon: '🧬', label: 'Startup DNA' },
+  { href: '/matching', icon: '🤝', label: 'Co-Founder Match' },
+  { href: '/revenue', icon: '💰', label: 'Revenue Predictor' },
+  { href: '/competitor', icon: '🔮', label: 'Competitor Killer' },
   { href: '/launch', icon: '🚀', label: 'Launch in 5min' },
   { href: '/cofounder', icon: '🤖', label: 'AI Co-Founder' },
   { href: '/codegen', icon: '💻', label: 'Code Generator' },
