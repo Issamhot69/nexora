@@ -1,9 +1,5 @@
-import { Pool } from 'pg'
+import { neon } from '@neondatabase/serverless'
 
-const pool = new Pool({
-  database: 'nexoro',
-  host: 'localhost',
-  port: 5432,
-})
+const sql = neon(process.env.DATABASE_URL!)
 
-export default pool
+export default sql
