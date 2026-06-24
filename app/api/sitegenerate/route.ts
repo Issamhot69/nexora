@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { prompt, template, color, bgImage } = await req.json()
+  const { prompt, template, color, bgImage, generatedBgCSS } = await req.json()
 
   // Étape 1: Groq génère le contenu JSON
   const contentRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -103,6 +103,9 @@ Return ONLY this JSON structure:
   const text = isDark || isGradient ? '#ffffff' : '#1a1a1a'
   const cardBg = isDark ? '#1a1a2e' : isGradient ? 'rgba(255,255,255,0.1)' : '#f8f9fa'
   const navBg = isDark ? '#16213e' : isGradient ? 'rgba(0,0,0,0.2)' : '#ffffff'
+
+  // CSS de fond IA si disponible
+  const aiBgStyle = generatedBgCSS ? generatedBgCSS.replace(/<style>|<\/style>/g, '') : ''
 
   const html = `<!DOCTYPE html>
 <html lang="fr">
