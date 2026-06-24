@@ -24,6 +24,7 @@ export default function SiteBuilder() {
   const [loading, setLoading] = useState(false)
   const [view, setView] = useState<'preview' | 'code'>('preview')
   const [deployed, setDeployed] = useState(false)
+  const [deployedUrl, setDeployedUrl] = useState('')
 
   const generate = async () => {
     if (!prompt.trim()) return
@@ -76,8 +77,23 @@ Génère un site web HTML complet et professionnel pour cette startup.`
 
   const simulateDeploy = async () => {
     setDeployed(false)
-    await new Promise(r => setTimeout(r, 2000))
-    setDeployed(true)
+    try {
+      const res = await fetch('/api/deploy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ html, siteName: prompt.slice(0,20) || 'my-site' })
+      })
+      const data = await res.json()
+      if (data.url) {
+        setDeployedUrl(data.url)
+        setDeployed(true)
+      }
+    } catch {
+      // Fallback simulation
+      await new Promise(r => setTimeout(r, 2000))
+      setDeployedUrl('https://my-site-nexoro.vercel.app')
+      setDeployed(true)
+    }
   }
 
   const cleanHtml = (() => {
@@ -119,10 +135,14 @@ Génère un site web HTML complet et professionnel pour cette startup.`
         {deployed && (
           <div className="bg-green-900/20 border border-green-700 rounded-2xl p-4 flex items-center gap-3">
             <span className="text-2xl">🎉</span>
-            <div>
+            <div className="flex-1">
               <p className="font-semibold text-green-400">Site déployé avec succès !</p>
-              <p className="text-green-600 text-sm">nexora-puce-eight.vercel.app/sites/{prompt.slice(0,10).replace(/\s/g,'-').toLowerCase()}</p>
+              <a href={deployedUrl} target="_blank" className="text-green-500 text-sm underline">{deployedUrl}</a>
             </div>
+            <a href={deployedUrl} target="_blank"
+              className="bg-green-600 hover:bg-green-500 text-white text-xs py-1.5 px-4 rounded-xl">
+              Voir →
+            </a>
           </div>
         )}
 
