@@ -21,11 +21,18 @@ const menuGroups = [
     label: '🌐 Création de Sites',
     items: [
       { href: '/imagegen', icon: '🎨', label: 'Image Generator' },
+      { href: '/videogen', icon: '🎬', label: 'Video Generator' },
+      { href: '/recipes', icon: '📚', label: 'Recipe Book' },
+      { href: '/tripplanner', icon: '✈️', label: 'Trip Planner' },
+      { href: '/cvbuilder', icon: '📄', label: 'CV Builder' },
+      { href: '/tiktok', icon: '📱', label: 'TikTok Scripts' },
+      { href: '/catalogue', icon: '🛍️', label: 'Catalogue' },
       { href: '/logo', icon: '✨', label: 'Logo Generator' },
       { href: '/sitebuilder', icon: '🌐', label: 'Site Builder' },
       { href: '/siteeditor', icon: '✏️', label: 'Site Editor' },
       { href: '/styles', icon: '🎨', label: 'Style AI' },
       { href: '/animations', icon: '🎬', label: 'Animations' },
+      { href: '/foodanim', icon: '🍽️', label: 'Food Animations' },
       { href: '/domains', icon: '🔗', label: 'Domain Manager' },
       { href: '/preview', icon: '🖥️', label: 'UI Builder' },
     ]
