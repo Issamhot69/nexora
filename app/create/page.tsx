@@ -1,31 +1,17 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-
-const steps = [
-  { id: 1, icon: '📝', title: 'Ton business', desc: 'Décris ton activité' },
-  { id: 2, icon: '🎨', title: 'Design', desc: 'Template & couleurs' },
-  { id: 3, icon: '🖼️', title: 'Visuels', desc: 'Logo & images' },
-  { id: 4, icon: '✨', title: 'Génération', desc: 'IA crée ton site' },
-  { id: 5, icon: '✏️', title: 'Édition', desc: 'Modifier le contenu' },
-  { id: 6, icon: '🚀', title: 'Publication', desc: 'Mettre en ligne' },
-  { id: 7, icon: '🌐', title: 'Domaine', desc: 'Ton adresse web' },
-  { id: 8, icon: '📊', title: 'Analytics', desc: 'Suivi des visites' },
-]
 
 const templates = [
-  { id: 'restaurant', icon: '🍔', name: 'Restaurant / Café', desc: 'Menu, réservations, livraison' },
-  { id: 'startup', icon: '🚀', name: 'Startup / SaaS', desc: 'Landing page, pricing, features' },
-  { id: 'ecommerce', icon: '🛒', name: 'Boutique en ligne', desc: 'Produits, panier, paiement' },
-  { id: 'agency', icon: '🏢', name: 'Agence / Studio', desc: 'Portfolio, services, contact' },
-  { id: 'medical', icon: '🏥', name: 'Médical / Clinique', desc: 'Services, médecins, rendez-vous' },
-  { id: 'realestate', icon: '🏠', name: 'Immobilier', desc: 'Propriétés, agents, recherche' },
-  { id: 'fitness', icon: '💪', name: 'Fitness / Sport', desc: 'Cours, tarifs, inscription' },
-  { id: 'education', icon: '📚', name: 'Éducation', desc: 'Cours, formateurs, inscription' },
-  { id: 'travel', icon: '✈️', name: 'Tourisme / Hôtel', desc: 'Destinations, chambres, booking' },
-  { id: 'law', icon: '⚖️', name: 'Cabinet juridique', desc: 'Services, avocats, contact' },
-  { id: 'beauty', icon: '💄', name: 'Beauté / Spa', desc: 'Services, équipe, réservation' },
-  { id: 'construction', icon: '🏗️', name: 'BTP / Construction', desc: 'Projets, services, devis' },
+  { id: 'restaurant', icon: '🍔', name: 'Restaurant' },
+  { id: 'startup', icon: '🚀', name: 'Startup' },
+  { id: 'ecommerce', icon: '🛒', name: 'Boutique' },
+  { id: 'agency', icon: '🏢', name: 'Agence' },
+  { id: 'medical', icon: '🏥', name: 'Médical' },
+  { id: 'realestate', icon: '🏠', name: 'Immobilier' },
+  { id: 'fitness', icon: '💪', name: 'Fitness' },
+  { id: 'education', icon: '📚', name: 'Éducation' },
+  { id: 'travel', icon: '✈️', name: 'Tourisme' },
+  { id: 'beauty', icon: '💄', name: 'Beauté' },
 ]
 
 const colorThemes = [
@@ -38,39 +24,58 @@ const colorThemes = [
 ]
 
 const bgImages = [
-  { id: 'none', label: '⬛ Couleur', url: '' },
-  { id: 'city', label: '🌆 Ville', url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=80' },
-  { id: 'nature', label: '🌿 Nature', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80' },
-  { id: 'tech', label: '💻 Tech', url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80' },
-  { id: 'food', label: '🍽️ Food', url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80' },
-  { id: 'ocean', label: '🌊 Océan', url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&q=80' },
-  { id: 'abstract', label: '🎨 Abstrait', url: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=1920&q=80' },
-  { id: 'space', label: '🚀 Espace', url: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80' },
+  { id: 'none', label: 'Couleur', url: '' },
+  { id: 'city', label: 'Ville', url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=80' },
+  { id: 'nature', label: 'Nature', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80' },
+  { id: 'tech', label: 'Tech', url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80' },
+  { id: 'food', label: 'Food', url: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80' },
+  { id: 'ocean', label: 'Ocean', url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&q=80' },
+  { id: 'abstract', label: 'Abstrait', url: 'https://images.unsplash.com/photo-1557682250-33bd709cbe85?w=1920&q=80' },
+  { id: 'space', label: 'Espace', url: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80' },
+]
+
+const currencies = [
+  { code: 'MAD', flag: '🇲🇦', name: 'Dirham' },
+  { code: 'EUR', flag: '🇪🇺', name: 'Euro' },
+  { code: 'USD', flag: '🇺🇸', name: 'Dollar' },
+  { code: 'GBP', flag: '🇬🇧', name: 'Livre' },
+  { code: 'TND', flag: '🇹🇳', name: 'Dinar TN' },
+  { code: 'DZD', flag: '🇩🇿', name: 'Dinar DZ' },
+  { code: 'SAR', flag: '🇸🇦', name: 'Riyal' },
+  { code: 'AED', flag: '🇦🇪', name: 'Dirham AE' },
+  { code: 'XOF', flag: '🌍', name: 'CFA' },
+  { code: 'CAD', flag: '🇨🇦', name: 'CAD' },
+  { code: 'BRL', flag: '🇧🇷', name: 'Real' },
+  { code: 'INR', flag: '🇮🇳', name: 'Rupee' },
 ]
 
 export default function CreateSite() {
-  const router = useRouter()
-  const [currentStep, setCurrentStep] = useState(1)
+  const [mode, setMode] = useState('form')
+  const [aiPrompt, setAiPrompt] = useState('')
   const [businessName, setBusinessName] = useState('')
+  const [slogan, setSlogan] = useState('')
   const [businessDesc, setBusinessDesc] = useState('')
   const [businessType, setBusinessType] = useState('restaurant')
   const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
   const [address, setAddress] = useState('')
+  const [hours, setHours] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
+  const [services, setServices] = useState('')
+  const [menu, setMenu] = useState('')
+  const [prices, setPrices] = useState('')
   const [colorTheme, setColorTheme] = useState('indigo')
   const [bgImage, setBgImage] = useState('none')
   const [darkMode, setDarkMode] = useState(true)
-  const [logo, setLogo] = useState<string | null>(null)
+  const [logo, setLogo] = useState(null as string | null)
+  const [currency, setCurrency] = useState('MAD')
   const [html, setHtml] = useState('')
   const [generating, setGenerating] = useState(false)
   const [deployed, setDeployed] = useState(false)
   const [deployedUrl, setDeployedUrl] = useState('')
-  const [bgAiDesc, setBgAiDesc] = useState('')
-  const [bgAiLoading, setBgAiLoading] = useState(false)
-  const [bgAiCSS, setBgAiCSS] = useState('')
 
-  const selectedTheme = colorThemes.find(t => t.id === colorTheme)!
-  const selectedBg = bgImages.find(b => b.id === bgImage)!
-  const selectedTemplate = templates.find(t => t.id === businessType)!
+  const selectedTheme = colorThemes.find(t => t.id === colorTheme) || colorThemes[0]
+  const selectedBg = bgImages.find(b => b.id === bgImage) || bgImages[0]
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -80,27 +85,32 @@ export default function CreateSite() {
     reader.readAsDataURL(file)
   }
 
-  const generateBgAI = async () => {
-    if (!bgAiDesc) return
-    setBgAiLoading(true)
-    try {
-      const res = await fetch('/api/bggenerate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description: bgAiDesc })
-      })
-      const data = await res.json()
-      setBgAiCSS(data.css)
-      setBgImage('ai')
-    } catch {}
-    setBgAiLoading(false)
+  const buildPrompt = () => {
+    if (mode === 'ai') return aiPrompt
+    return `
+Business Name: ${businessName}
+Slogan: ${slogan}
+Type: ${templates.find(t => t.id === businessType)?.name}
+Description: ${businessDesc}
+Phone: ${phone}
+WhatsApp: ${whatsapp}
+Email: ${email}
+Address: ${address}
+Hours: ${hours}
+Menu/Services: ${menu} ${services}
+Prices in ${currency}: ${prices}
+Currency to use: ${currency}
+
+IMPORTANT: Use ALL the real information above in the website. Use real phone, email, address, hours, menu with real prices in ${currency}. Make it a REAL professional website.
+`
   }
 
   const generateSite = async () => {
+    const prompt = buildPrompt()
+    if (!prompt.trim()) return
     setGenerating(true)
     setHtml('')
     try {
-      const prompt = `${businessName} — ${businessDesc}. Type: ${selectedTemplate.name}. Phone: ${phone}. Address: ${address}.`
       const res = await fetch('/api/sitegenerate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -109,8 +119,6 @@ export default function CreateSite() {
           template: businessType,
           color: darkMode ? 'dark' : 'light',
           bgImage: selectedBg.url,
-          generatedBgCSS: bgAiCSS,
-          colorTheme: selectedTheme,
           logo,
         })
       })
@@ -125,12 +133,12 @@ export default function CreateSite() {
       const res = await fetch('/api/deploy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ html, siteName: businessName })
+        body: JSON.stringify({ html, siteName: businessName || 'my-site' })
       })
       const data = await res.json()
       if (data.url) { setDeployedUrl(data.url); setDeployed(true) }
     } catch {
-      setDeployedUrl(`https://${businessName.toLowerCase().replace(/\s/g, '-')}.nexoro.app`)
+      setDeployedUrl('https://my-site.vercel.app')
       setDeployed(true)
     }
   }
@@ -140,473 +148,270 @@ export default function CreateSite() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${businessName}-site.html`
+    a.download = (businessName || 'site') + '-nexoro.html'
     a.click()
   }
 
-  const next = () => {
-    if (currentStep === 4 && !html) { generateSite(); }
-    if (currentStep < 8) setCurrentStep(prev => prev + 1)
-  }
-  const prev = () => { if (currentStep > 1) setCurrentStep(prev => prev - 1) }
-
   return (
     <main className="min-h-screen bg-gray-950 text-white">
-      {/* Header progress */}
-      <div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-800 px-6 py-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            {steps.map(step => (
-              <button key={step.id} onClick={() => setCurrentStep(step.id)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex-shrink-0 ${currentStep === step.id ? 'bg-indigo-600 text-white' : currentStep > step.id ? 'bg-green-900/30 text-green-400' : 'text-gray-500 hover:text-gray-300'}`}>
-                {currentStep > step.id ? '✅' : step.icon}
-                <span className="hidden md:block">{step.title}</span>
+      <div className="sticky top-0 z-10 bg-gray-900 border-b border-gray-800 px-4 py-3">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
+          <h1 className="text-lg font-bold">✨ Créer mon site web</h1>
+          {businessName && <span className="text-sm text-indigo-400 font-semibold">{businessName}</span>}
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto p-4 space-y-6">
+
+        {/* MODE */}
+        <div className="bg-gray-900 border border-indigo-700 rounded-2xl p-5">
+          <h2 className="font-bold text-lg mb-4">🚀 Comment veux-tu créer ton site ?</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <button onClick={() => setMode('form')}
+              className={'p-5 rounded-xl text-left border-2 transition-all ' + (mode === 'form' ? 'border-indigo-500 bg-indigo-900/30' : 'border-gray-700 bg-gray-800 hover:border-gray-600')}>
+              <div className="text-3xl mb-2">📝</div>
+              <div className="font-bold">Remplir le formulaire</div>
+              <div className="text-gray-400 text-sm mt-1">Entre tes vraies infos — nom, menu, photos, contact</div>
+            </button>
+            <button onClick={() => setMode('ai')}
+              className={'p-5 rounded-xl text-left border-2 transition-all ' + (mode === 'ai' ? 'border-indigo-500 bg-indigo-900/30' : 'border-gray-700 bg-gray-800 hover:border-gray-600')}>
+              <div className="text-3xl mb-2">🤖</div>
+              <div className="font-bold">Décrire en une phrase</div>
+              <div className="text-gray-400 text-sm mt-1">L'IA génère tout automatiquement</div>
+            </button>
+          </div>
+        </div>
+
+        {/* MODE AI */}
+        {mode === 'ai' && (
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+            <h2 className="font-bold">🤖 Décris ton business</h2>
+            <textarea value={aiPrompt} onChange={e => setAiPrompt(e.target.value)}
+              placeholder="Ex: Je suis un restaurant fast food à Casablanca, burgers artisanaux, livraison 7j/7 de 11h à 23h, tél: 0612345678, adresse: 123 Rue Hassan II"
+              className="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 resize-none h-28 focus:outline-none focus:border-indigo-500" />
+
+            <div>
+              <p className="text-xs text-gray-400 mb-2">Type de site</p>
+              <div className="grid grid-cols-5 gap-2">
+                {templates.map(t => (
+                  <button key={t.id} onClick={() => setBusinessType(t.id)}
+                    className={'flex flex-col items-center gap-1 p-2 rounded-xl transition-all ' + (businessType === t.id ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700')}>
+                    <span className="text-xl">{t.icon}</span>
+                    <span className="text-xs">{t.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODE FORM */}
+        {mode === 'form' && (
+          <>
+            {/* TYPE */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <h2 className="font-bold text-base mb-3 flex items-center gap-2">
+                <span className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-xs">1</span>
+                Type de site
+              </h2>
+              <div className="grid grid-cols-5 gap-2">
+                {templates.map(t => (
+                  <button key={t.id} onClick={() => setBusinessType(t.id)}
+                    className={'flex flex-col items-center gap-1 p-3 rounded-xl transition-all ' + (businessType === t.id ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700')}>
+                    <span className="text-2xl">{t.icon}</span>
+                    <span className="text-xs font-medium">{t.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* INFOS */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
+              <h2 className="font-bold text-base mb-1 flex items-center gap-2">
+                <span className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-xs">2</span>
+                Informations
+              </h2>
+              <input value={businessName} onChange={e => setBusinessName(e.target.value)}
+                placeholder="Nom de ton business *"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-semibold" />
+              <input value={slogan} onChange={e => setSlogan(e.target.value)}
+                placeholder="Slogan — Ex: Le meilleur burger de la ville 🍔"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+              <textarea value={businessDesc} onChange={e => setBusinessDesc(e.target.value)}
+                placeholder="Description de ton activité..."
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 resize-none h-20 focus:outline-none focus:border-indigo-500" />
+              <div className="grid grid-cols-2 gap-3">
+                <input value={phone} onChange={e => setPhone(e.target.value)}
+                  placeholder="📞 Téléphone"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+                <input value={whatsapp} onChange={e => setWhatsapp(e.target.value)}
+                  placeholder="💬 WhatsApp"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+                <input value={email} onChange={e => setEmail(e.target.value)}
+                  placeholder="📧 Email"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+                <input value={hours} onChange={e => setHours(e.target.value)}
+                  placeholder="⏰ Horaires — Lun-Dim 11h-23h"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+              </div>
+              <input value={address} onChange={e => setAddress(e.target.value)}
+                placeholder="📍 Adresse complète"
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            {/* DEVISE */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <h2 className="font-bold text-base mb-3 flex items-center gap-2">
+                <span className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-xs">3</span>
+                Devise
+              </h2>
+              <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                {currencies.map(c => (
+                  <button key={c.code} onClick={() => setCurrency(c.code)}
+                    className={'p-2 rounded-xl text-center transition-all ' + (currency === c.code ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700')}>
+                    <div className="text-xl">{c.flag}</div>
+                    <div className="text-xs font-bold">{c.code}</div>
+                    <div className="text-xs opacity-60">{c.name}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* MENU / SERVICES */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
+              <h2 className="font-bold text-base mb-1 flex items-center gap-2">
+                <span className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-xs">4</span>
+                {businessType === 'restaurant' ? 'Menu & Prix' : 'Services & Prix'}
+              </h2>
+              <textarea value={menu} onChange={e => setMenu(e.target.value)}
+                placeholder={businessType === 'restaurant' ?
+                  'Menu:\n🍔 Classic Burger - 45 ' + currency + '\n🍟 Frites - 15 ' + currency + '\n🥤 Boisson - 12 ' + currency :
+                  'Services:\n✅ Service 1 - Prix en ' + currency + '\n✅ Service 2 - Prix en ' + currency}
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 resize-none h-32 focus:outline-none focus:border-indigo-500 font-mono text-sm" />
+              <textarea value={services} onChange={e => setServices(e.target.value)}
+                placeholder="Services additionnels — Ex: Livraison, Sur place, Réservations..."
+                className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 resize-none h-16 focus:outline-none focus:border-indigo-500" />
+            </div>
+
+            {/* PHOTOS */}
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+              <h2 className="font-bold text-base mb-3 flex items-center gap-2">
+                <span className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-xs">5</span>
+                Logo & Photos
+              </h2>
+              <label className="flex items-center gap-3 bg-gray-800 border border-dashed border-gray-600 rounded-xl p-4 cursor-pointer hover:border-indigo-500 transition-all">
+                {logo ? (
+                  <img src={logo} alt="logo" className="h-14 w-14 object-contain bg-white rounded-lg p-1" />
+                ) : (
+                  <div className="w-14 h-14 bg-gray-700 rounded-xl flex items-center justify-center text-3xl">📤</div>
+                )}
+                <div>
+                  <p className="font-semibold text-sm">{logo ? '✅ Logo uploadé' : 'Upload ton logo'}</p>
+                  <p className="text-gray-500 text-xs">PNG, SVG recommandé</p>
+                </div>
+                <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+                {logo && <button onClick={e => { e.preventDefault(); setLogo(null) }} className="ml-auto text-red-400 text-xs">🗑️ Supprimer</button>}
+              </label>
+            </div>
+          </>
+        )}
+
+        {/* DESIGN */}
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+          <h2 className="font-bold text-base flex items-center gap-2">
+            <span className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-xs">{mode === 'form' ? '6' : '2'}</span>
+            Design
+          </h2>
+          <div className="grid grid-cols-6 gap-2">
+            {colorThemes.map(t => (
+              <button key={t.id} onClick={() => setColorTheme(t.id)}
+                className={'p-2 rounded-xl text-center transition-all ' + (colorTheme === t.id ? 'ring-2 ring-white scale-105' : 'hover:scale-105')}
+                style={{ background: 'linear-gradient(135deg, ' + t.c1 + ', ' + t.c2 + ')' }}>
+                <div className="text-white text-xs font-bold">{t.name}</div>
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => setDarkMode(true)}
+              className={'flex-1 py-2 rounded-xl text-sm font-semibold ' + (darkMode ? 'bg-gray-700 text-white' : 'bg-gray-800 text-gray-500')}>
+              🌙 Dark
+            </button>
+            <button onClick={() => setDarkMode(false)}
+              className={'flex-1 py-2 rounded-xl text-sm font-semibold ' + (!darkMode ? 'bg-white text-gray-900' : 'bg-gray-800 text-gray-500')}>
+              ☀️ Light
+            </button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
+            {bgImages.map(bg => (
+              <button key={bg.id} onClick={() => setBgImage(bg.id)}
+                className={'relative rounded-xl overflow-hidden h-12 transition-all ' + (bgImage === bg.id ? 'ring-2 ring-indigo-500 scale-105' : 'hover:scale-105')}>
+                {bg.url ? (
+                  <img src={bg.url} alt={bg.label} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center text-xs text-gray-400">⬛</div>
+                )}
+                <div className="absolute inset-0 bg-black/40 flex items-end">
+                  <span className="text-white text-xs w-full text-center">{bg.label}</span>
+                </div>
               </button>
             ))}
           </div>
         </div>
-      </div>
 
-      <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-6">
-        {/* Step 1 — Business Info */}
-        {currentStep === 1 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">📝 Parle-moi de ton business</h1>
-              <p className="text-gray-500 mt-1">Ces infos seront utilisées pour créer tout le contenu de ton site</p>
-            </div>
+        {/* GÉNÉRER */}
+        <button onClick={generateSite} disabled={generating || (mode === 'form' && !businessName) || (mode === 'ai' && !aiPrompt)}
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white font-bold py-5 rounded-2xl transition-all text-xl shadow-2xl">
+          {generating ? (
+            <span className="flex items-center justify-center gap-3">
+              <span className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin inline-block"></span>
+              L'IA génère ton site...
+            </span>
+          ) : '✨ Générer mon site complet'}
+        </button>
 
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
+        {/* RÉSULTAT */}
+        {html && (
+          <div className="space-y-4">
+            <div className="bg-green-900/20 border border-green-700 rounded-2xl p-4 flex items-center gap-3">
+              <span className="text-3xl">🎉</span>
               <div>
-                <label className="text-sm text-gray-400 mb-2 block font-medium">Nom de ton business *</label>
-                <input value={businessName} onChange={e => setBusinessName(e.target.value)}
-                  placeholder="Ex: FastFoodGenie, Café du Marché, Studio Pixel..."
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-lg font-semibold" />
+                <p className="font-bold text-green-400">Ton site est prêt !</p>
+                <p className="text-green-600 text-sm">Télécharge, déploie ou connecte ton domaine</p>
               </div>
-              <div>
-                <label className="text-sm text-gray-400 mb-2 block font-medium">Décris ton activité *</label>
-                <textarea value={businessDesc} onChange={e => setBusinessDesc(e.target.value)}
-                  placeholder="Ex: Restaurant fast food spécialisé en burgers artisanaux et sushis fusion, livraison 7j/7, ouvert depuis 2020..."
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 resize-none h-28 focus:outline-none focus:border-indigo-500" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm text-gray-400 mb-2 block">Téléphone</label>
-                  <input value={phone} onChange={e => setPhone(e.target.value)}
-                    placeholder="+33 6 12 34 56 78"
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
+            </div>
+            <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+              <div className="p-3 border-b border-gray-800 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 </div>
-                <div>
-                  <label className="text-sm text-gray-400 mb-2 block">Adresse</label>
-                  <input value={address} onChange={e => setAddress(e.target.value)}
-                    placeholder="123 Rue de Paris, 75001"
-                    className="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
-                </div>
+                <span className="text-xs text-gray-400 flex-1 text-center">{(businessName || 'my-site').toLowerCase().replace(/\s/g, '-')}.com</span>
+                <button onClick={generateSite} disabled={generating} className="text-xs text-indigo-400">🔄 Regénérer</button>
               </div>
+              <iframe srcDoc={html} className="w-full h-[600px]" sandbox="allow-scripts allow-same-origin" title="Preview" />
             </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h2 className="text-sm font-medium text-gray-400 mb-4">Type de site *</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {templates.map(t => (
-                  <button key={t.id} onClick={() => setBusinessType(t.id)}
-                    className={`flex items-center gap-3 p-3 rounded-xl transition-all text-left ${businessType === t.id ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}>
-                    <span className="text-2xl">{t.icon}</span>
-                    <div>
-                      <div className="text-xs font-semibold">{t.name}</div>
-                      <div className="text-xs opacity-60">{t.desc}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2 — Design */}
-        {currentStep === 2 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">🎨 Design de ton site</h1>
-              <p className="text-gray-500 mt-1">Choisis les couleurs, le style et l'image de fond</p>
-            </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h2 className="text-sm font-medium text-gray-400 mb-4">Couleur principale</h2>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                {colorThemes.map(t => (
-                  <button key={t.id} onClick={() => setColorTheme(t.id)}
-                    className={`p-4 rounded-xl transition-all text-center ${colorTheme === t.id ? 'ring-2 ring-white scale-105' : 'hover:scale-105'}`}
-                    style={{ background: `linear-gradient(135deg, ${t.c1}, ${t.c2})` }}>
-                    <div className="text-white text-xs font-bold">{t.name}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-medium text-gray-400">Style</h2>
-                <div className="flex gap-2">
-                  <button onClick={() => setDarkMode(true)}
-                    className={`px-4 py-2 rounded-xl text-sm transition-all ${darkMode ? 'bg-gray-700 text-white' : 'text-gray-500'}`}>
-                    🌙 Dark
-                  </button>
-                  <button onClick={() => setDarkMode(false)}
-                    className={`px-4 py-2 rounded-xl text-sm transition-all ${!darkMode ? 'bg-white text-gray-900' : 'text-gray-500'}`}>
-                    ☀️ Light
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h2 className="text-sm font-medium text-gray-400 mb-4">Image de fond</h2>
-              <div className="grid grid-cols-4 md:grid-cols-8 gap-2 mb-4">
-                {bgImages.map(bg => (
-                  <button key={bg.id} onClick={() => setBgImage(bg.id)}
-                    className={`relative rounded-xl overflow-hidden h-14 transition-all ${bgImage === bg.id ? 'ring-2 ring-indigo-500 scale-105' : 'hover:scale-105'}`}>
-                    {bg.url ? (
-                      <img src={bg.url} alt={bg.label} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full bg-gray-800 flex items-center justify-center text-xs">⬛</div>
-                    )}
-                    <div className="absolute inset-0 bg-black/40 flex items-end p-1">
-                      <span className="text-white text-xs w-full text-center">{bg.label}</span>
-                    </div>
-                    {bgImage === bg.id && <div className="absolute top-1 right-1 w-4 h-4 bg-indigo-500 rounded-full flex items-center justify-center text-xs">✓</div>}
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-indigo-900/30 border border-indigo-700 rounded-xl p-4">
-                <p className="text-indigo-400 text-sm font-semibold mb-2">🤖 Générer un fond avec l'IA</p>
-                <div className="flex gap-2">
-                  <input value={bgAiDesc} onChange={e => setBgAiDesc(e.target.value)}
-                    placeholder="Ex: océan tropical, forêt magique, espace galactique..."
-                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-indigo-500" />
-                  <button onClick={generateBgAI} disabled={bgAiLoading || !bgAiDesc}
-                    className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm px-4 py-2 rounded-xl whitespace-nowrap">
-                    {bgAiLoading ? '⏳' : '✨ Générer'}
-                  </button>
-                </div>
-                {bgAiCSS && bgImage === 'ai' && (
-                  <div className="mt-2 flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    <span className="text-green-400 text-xs">Fond IA actif — "{bgAiDesc}"</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3 — Logo & Images */}
-        {currentStep === 3 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">🖼️ Logo & Images</h1>
-              <p className="text-gray-500 mt-1">Upload ton logo ou génère-en un avec l'IA</p>
-            </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h2 className="text-sm font-medium text-gray-400 mb-4">Logo</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-700 rounded-xl p-8 cursor-pointer hover:border-indigo-500 transition-all">
-                  {logo ? (
-                    <img src={logo} alt="logo" className="h-20 object-contain" />
-                  ) : (
-                    <>
-                      <div className="text-4xl mb-3">📤</div>
-                      <p className="text-gray-400 text-sm">Upload ton logo</p>
-                      <p className="text-gray-600 text-xs mt-1">PNG, SVG recommandé</p>
-                    </>
-                  )}
-                  <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
-                </label>
-                <div className="flex flex-col items-center justify-center bg-gray-800 rounded-xl p-6">
-                  <div className="text-4xl mb-3">✨</div>
-                  <p className="text-gray-300 font-semibold text-sm mb-2">Générer avec l'IA</p>
-                  <p className="text-gray-500 text-xs text-center mb-4">L'IA génère 4 logos basés sur le nom de ton business</p>
-                  <button onClick={() => router.push('/logo')}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm py-2 px-6 rounded-xl transition-all">
-                    Ouvrir Logo Generator →
-                  </button>
-                </div>
-              </div>
-              {logo && (
-                <button onClick={() => setLogo(null)}
-                  className="mt-3 text-red-400 text-sm hover:text-red-300">
-                  🗑️ Supprimer le logo
-                </button>
-              )}
-            </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-              <h2 className="text-sm font-medium text-gray-400 mb-4">Images pour ton site</h2>
-              <p className="text-gray-500 text-sm mb-4">Tu peux générer des images personnalisées pour ton site avec notre IA</p>
-              <button onClick={() => router.push('/imagegen')}
-                className="bg-gray-800 hover:bg-gray-700 text-white text-sm py-2 px-6 rounded-xl transition-all">
-                🖼️ Ouvrir Image Generator →
+            <div className="grid grid-cols-3 gap-3">
+              <button onClick={downloadHTML} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-4 rounded-xl text-sm">
+                📥 Télécharger HTML
               </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 4 — Génération */}
-        {currentStep === 4 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">✨ Génération du site</h1>
-              <p className="text-gray-500 mt-1">L'IA crée ton site complet en 30 secondes</p>
-            </div>
-
-            {/* Résumé */}
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-3">
-              <h2 className="text-sm font-medium text-gray-400">Récapitulatif</h2>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-800 rounded-xl p-3">
-                  <p className="text-xs text-gray-500">Business</p>
-                  <p className="font-semibold">{businessName || '—'}</p>
-                </div>
-                <div className="bg-gray-800 rounded-xl p-3">
-                  <p className="text-xs text-gray-500">Type</p>
-                  <p className="font-semibold">{selectedTemplate.icon} {selectedTemplate.name}</p>
-                </div>
-                <div className="bg-gray-800 rounded-xl p-3">
-                  <p className="text-xs text-gray-500">Couleur</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="w-4 h-4 rounded-full" style={{ background: selectedTheme.c1 }}></div>
-                    <p className="font-semibold">{selectedTheme.name}</p>
-                  </div>
-                </div>
-                <div className="bg-gray-800 rounded-xl p-3">
-                  <p className="text-xs text-gray-500">Style</p>
-                  <p className="font-semibold">{darkMode ? '🌙 Dark' : '☀️ Light'}</p>
-                </div>
-              </div>
-            </div>
-
-            {!html ? (
-              <button onClick={generateSite} disabled={generating || !businessName}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white font-bold py-6 rounded-2xl transition-all text-xl">
-                {generating ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                    L'IA génère ton site...
-                  </span>
-                ) : '✨ Générer mon site maintenant'}
+              <button onClick={deploy} disabled={deployed} className="bg-green-600 hover:bg-green-500 disabled:opacity-70 text-white font-bold py-4 rounded-xl text-sm">
+                {deployed ? '✅ Déployé !' : '🚀 Publier en ligne'}
               </button>
-            ) : (
-              <div className="space-y-4">
-                <div className="bg-green-900/20 border border-green-700 rounded-2xl p-4 flex items-center gap-3">
-                  <span className="text-3xl">🎉</span>
-                  <div>
-                    <p className="font-semibold text-green-400">Site généré avec succès !</p>
-                    <p className="text-green-600 text-sm">Clique sur Suivant pour voir et modifier ton site</p>
-                  </div>
-                </div>
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-                  <div className="p-3 border-b border-gray-800 flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-xs text-gray-400">{businessName}.nexoro.app</span>
-                  </div>
-                  <iframe srcDoc={html} className="w-full h-96" sandbox="allow-scripts allow-same-origin" title="Preview" />
-                </div>
-                <button onClick={generateSite} disabled={generating}
-                  className="w-full bg-gray-800 hover:bg-gray-700 text-white py-3 rounded-xl transition-all text-sm">
-                  🔄 Regénérer
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Step 5 — Édition */}
-        {currentStep === 5 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">✏️ Modifier ton site</h1>
-              <p className="text-gray-500 mt-1">Personnalise chaque section de ton site</p>
+              <a href={'https://www.namecheap.com/domains/registration/results/?domain=' + (businessName || 'mysite').toLowerCase().replace(/\s/g, '') + '.com'}
+                target="_blank"
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-4 rounded-xl text-sm text-center block">
+                🌐 Acheter domaine
+              </a>
             </div>
-            {html ? (
-              <div className="space-y-4">
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
-                  <div className="p-3 border-b border-gray-800 flex items-center justify-between">
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-xs text-gray-400">{businessName}.nexoro.app</span>
-                    <button onClick={downloadHTML} className="text-xs bg-gray-800 hover:bg-gray-700 text-white px-3 py-1 rounded-lg">
-                      📥 HTML
-                    </button>
-                  </div>
-                  <iframe srcDoc={html} className="w-full h-[600px]" sandbox="allow-scripts allow-same-origin" title="Site Preview" />
-                </div>
-                <button onClick={() => router.push('/siteeditor')}
-                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl">
-                  ✏️ Ouvrir l'éditeur avancé →
-                </button>
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <p className="text-gray-500">⚠️ Génère d'abord ton site à l'étape 4</p>
-                <button onClick={() => setCurrentStep(4)} className="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-xl">
-                  ← Retour à la génération
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Step 6 — Publication */}
-        {currentStep === 6 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">🚀 Publier ton site</h1>
-              <p className="text-gray-500 mt-1">Mets ton site en ligne en 1 clic</p>
-            </div>
-            {deployed ? (
-              <div className="space-y-4">
-                <div className="bg-green-900/20 border border-green-700 rounded-2xl p-6 text-center">
-                  <div className="text-5xl mb-3">🎉</div>
-                  <h2 className="text-xl font-bold text-green-400">Site publié !</h2>
-                  <a href={deployedUrl} target="_blank" className="text-green-500 underline block mt-2">{deployedUrl}</a>
-                </div>
-                <a href={deployedUrl} target="_blank"
-                  className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-xl transition-all">
-                  🌐 Voir mon site en ligne →
-                </a>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
-                  <div className="flex items-center gap-4 p-4 bg-gray-800 rounded-xl">
-                    <span className="text-3xl">⚡</span>
-                    <div>
-                      <p className="font-semibold">Déploiement Vercel</p>
-                      <p className="text-gray-400 text-sm">URL: {businessName.toLowerCase().replace(/\s/g, '-')}.vercel.app</p>
-                    </div>
-                    <span className="ml-auto text-green-400 text-xs font-semibold bg-green-900/30 px-3 py-1 rounded-full">Gratuit</span>
-                  </div>
-                </div>
-                <button onClick={deploy} disabled={!html}
-                  className="w-full bg-gradient-to-r from-green-600 to-indigo-600 hover:from-green-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-6 rounded-2xl transition-all text-xl">
-                  🚀 Publier maintenant
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Step 7 — Domaine */}
-        {currentStep === 7 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">🌐 Ton domaine</h1>
-              <p className="text-gray-500 mt-1">Achète ton adresse web professionnelle</p>
-            </div>
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-4">
-              <div className="bg-gray-800 rounded-xl p-4">
-                <p className="text-sm text-gray-400 mb-2">Domaine suggéré pour ton business :</p>
-                <div className="space-y-2">
-                  {['.com', '.fr', '.io', '.app'].map(ext => (
-                    <div key={ext} className="flex items-center justify-between bg-gray-700 rounded-xl p-3">
-                      <span className="font-mono font-semibold">{businessName.toLowerCase().replace(/\s/g, '')}{ext}</span>
-                      <a href={`https://www.namecheap.com/domains/registration/results/?domain=${businessName.toLowerCase().replace(/\s/g, '')}${ext}`}
-                        target="_blank"
-                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs py-1.5 px-4 rounded-lg transition-all">
-                        Acheter →
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-gray-800 rounded-xl p-4">
-                <p className="text-sm font-semibold mb-3">⚙️ Configuration DNS Vercel</p>
-                <div className="font-mono text-xs space-y-2 text-green-400">
-                  <div className="flex gap-4"><span className="w-16 text-gray-400">Type</span><span className="w-16 text-gray-400">Name</span><span className="text-gray-400">Value</span></div>
-                  <div className="flex gap-4"><span className="w-16">A</span><span className="w-16">@</span><span>76.76.21.21</span></div>
-                  <div className="flex gap-4"><span className="w-16">CNAME</span><span className="w-16">www</span><span>cname.vercel-dns.com</span></div>
-                </div>
-              </div>
-
-              <button onClick={() => router.push('/domains')}
-                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl">
-                🌐 Ouvrir Domain Manager →
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 8 — Analytics */}
-        {currentStep === 8 && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold">📊 Analytics</h1>
-              <p className="text-gray-500 mt-1">Suis les visites et performances de ton site</p>
-            </div>
-
             {deployed && (
-              <div className="bg-green-900/20 border border-green-700 rounded-2xl p-4 flex items-center gap-3">
-                <span className="text-2xl">🌐</span>
-                <div>
-                  <p className="font-semibold text-green-400">Ton site est en ligne !</p>
-                  <a href={deployedUrl} target="_blank" className="text-green-500 text-sm underline">{deployedUrl}</a>
-                </div>
+              <div className="bg-green-900/20 border border-green-700 rounded-2xl p-4 text-center">
+                <p className="font-bold text-green-400 text-lg">🎉 Site en ligne !</p>
+                <a href={deployedUrl} target="_blank" className="text-green-500 underline text-sm">{deployedUrl}</a>
               </div>
             )}
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: 'Visites', value: '0', icon: '👁️', color: 'text-blue-400' },
-                { label: 'Clics', value: '0', icon: '🖱️', color: 'text-green-400' },
-                { label: 'Contacts', value: '0', icon: '📧', color: 'text-purple-400' },
-                { label: 'Score SEO', value: '—', icon: '🔍', color: 'text-orange-400' },
-              ].map(stat => (
-                <div key={stat.label} className="bg-gray-900 border border-gray-800 rounded-2xl p-4 text-center">
-                  <div className="text-2xl mb-1">{stat.icon}</div>
-                  <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                  <div className="text-gray-500 text-xs">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 text-center space-y-4">
-              <div className="text-5xl">🎉</div>
-              <h2 className="text-2xl font-bold">Félicitations !</h2>
-              <p className="text-gray-400">Ton site <strong className="text-white">{businessName}</strong> est complet et en ligne !</p>
-              <div className="flex gap-3 justify-center flex-wrap">
-                {deployed && <a href={deployedUrl} target="_blank" className="bg-green-600 hover:bg-green-500 text-white font-semibold py-3 px-6 rounded-xl">🌐 Voir mon site</a>}
-                <button onClick={downloadHTML} className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl">📥 Télécharger HTML</button>
-                <button onClick={() => router.push('/seo')} className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl">🔍 Optimiser SEO</button>
-              </div>
-            </div>
           </div>
         )}
-
-        {/* Navigation */}
-        <div className="flex gap-3 pt-4 border-t border-gray-800">
-          {currentStep > 1 && (
-            <button onClick={prev} className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl transition-all">
-              ← Retour
-            </button>
-          )}
-          {currentStep < 8 && (
-            <button onClick={next}
-              disabled={currentStep === 1 && !businessName}
-              className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all">
-              {currentStep === 4 && !html ? '✨ Générer mon site →' : 'Suivant →'}
-            </button>
-          )}
-        </div>
       </div>
     </main>
   )
