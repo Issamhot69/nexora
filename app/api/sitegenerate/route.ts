@@ -356,14 +356,65 @@ ${c.whatsapp ? `<a href="https://wa.me/${c.whatsapp.replace(/\D/g,'')}" class="w
   </div>
   <div class="menu-grid">
     ${c.menu_items?.map((item: any, i: number) => {
-      const foodPhotos = [
-        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80',
-        'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80',
-        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80',
-        'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80',
-        'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=80',
-        'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=400&q=80',
-      ]
+      const itemPhotos: Record<string, string[]> = {
+        restaurant: [
+          'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80',
+          'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80',
+          'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80',
+          'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80',
+          'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&q=80',
+          'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=400&q=80',
+        ],
+        medical: [
+          'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80',
+          'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&q=80',
+          'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400&q=80',
+          'https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=400&q=80',
+          'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&q=80',
+          'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&q=80',
+        ],
+        fitness: [
+          'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80',
+          'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=400&q=80',
+          'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80',
+          'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=400&q=80',
+          'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80',
+          'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=400&q=80',
+        ],
+        beauty: [
+          'https://images.unsplash.com/photo-1560066984-138daaa6107c?w=400&q=80',
+          'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80',
+          'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&q=80',
+          'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400&q=80',
+          'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80',
+          'https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?w=400&q=80',
+        ],
+        ecommerce: [
+          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80',
+          'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
+          'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80',
+          'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&q=80',
+          'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80',
+          'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400&q=80',
+        ],
+        travel: [
+          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80',
+          'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80',
+          'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80',
+          'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=400&q=80',
+          'https://images.unsplash.com/photo-1488085061387-422e29b40080?w=400&q=80',
+          'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=400&q=80',
+        ],
+        education: [
+          'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80',
+          'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&q=80',
+          'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80',
+          'https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&q=80',
+          'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=400&q=80',
+          'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400&q=80',
+        ],
+      }
+      const foodPhotos = itemPhotos[template] || itemPhotos.restaurant
       return `
     <div class="menu-card">
       <div class="menu-card-img">
