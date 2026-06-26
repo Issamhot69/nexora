@@ -28,22 +28,36 @@ export default function ImageGen() {
   const [loading, setLoading] = useState(false)
   const [count, setCount] = useState(2)
 
-  const generate = () => {
+  const generate = async () => {
     if (!prompt.trim()) return
     setLoading(true)
 
     const selectedStyle = styles.find(s => s.id === style)?.prompt || ''
     const fullPrompt = encodeURIComponent(`${prompt}, ${selectedStyle}`)
 
-    const seeds = Array.from({ length: count }, (_, i) => Math.floor(Math.random() * 10000) + i * 10000)
-    const variations = ['photorealistic', 'digital art style', 'cinematic dramatic', 'artistic painting']
-    const newImages = seeds.map((seed, i) => ({
-      url: `https://image.pollinations.ai/prompt/${encodeURIComponent(`${prompt}, ${variations[i % variations.length]}, ${selectedStyle}`)}?width=1024&height=768&seed=${seed}&nologo=true&enhance=true`,
-      loaded: false
-    }))
+    const seeds = [
+      Math.floor(Math.random() * 9999) + 1,
+      Math.floor(Math.random() * 9999) + 10000,
+      Math.floor(Math.random() * 9999) + 20000,
+      Math.floor(Math.random() * 9999) + 30000
+    ].slice(0, count)
 
-    setImages(newImages)
+    const variations = [
+      'photorealistic professional portrait',
+      'with equipment and tools',
+      'working environment professional',
+      'close-up professional headshot'
+    ]
+
+    setImages([])
     setLoading(false)
+    
+    for (let i = 0; i < seeds.length; i++) {
+      await new Promise(r => setTimeout(r, i * 4000))
+      const fullPrompt = `${prompt}, ${variations[i]}, ${selectedStyle}, highly detailed, 8k`
+      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=1024&height=768&seed=${seeds[i]}&nologo=true&model=flux`
+      setImages(prev => [...prev, { url, loaded: false }])
+    }
   }
 
   const markLoaded = (i: number) => {
@@ -52,6 +66,16 @@ export default function ImageGen() {
 
   const download = (url: string, i: number) => {
     window.open(url, '_blank')
+  }
+
+  const addToSitePhotos = (url: string) => {
+    const existing = JSON.parse(localStorage.getItem('nexoro_site_photos') || '[]')
+    if (!existing.includes(url)) {
+      existing.push(url)
+      localStorage.setItem('nexoro_site_photos', JSON.stringify(existing.slice(0, 10)))
+    }
+    const count = JSON.parse(localStorage.getItem('nexoro_site_photos') || '[]').length
+    alert('✅ Photo ajoutée au site ! (' + count + '/10) — Retourne sur /create pour générer ton site')
   }
 
   const useAsBg = (url: string) => {
@@ -149,14 +173,18 @@ export default function ImageGen() {
                     />
                   </div>
                   {img.loaded && (
-                    <div className="p-3 flex gap-2">
+                    <div className="p-3 flex gap-2 flex-wrap">
                       <button onClick={() => download(img.url, i)}
                         className="flex-1 bg-gray-800 hover:bg-gray-700 text-white text-sm py-2 rounded-xl transition-all">
-                        📥 Ouvrir / Télécharger
+                        📥 Télécharger
+                      </button>
+                      <button onClick={() => addToSitePhotos(img.url)}
+                        className="flex-1 bg-green-600 hover:bg-green-500 text-white text-sm py-2 rounded-xl transition-all">
+                        ✅ Ajouter au site
                       </button>
                       <button onClick={() => useAsBg(img.url)}
-                        className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-sm py-2 rounded-xl transition-all">
-                        🌐 Utiliser comme fond
+                        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-sm py-2 rounded-xl transition-all">
+                        🌐 Utiliser comme fond hero
                       </button>
                     </div>
                   )}

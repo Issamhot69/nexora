@@ -52,6 +52,7 @@ const menuGroups = [
     items: [
       { href: '/studio', icon: '🎨', label: 'Mon Studio' },
       { href: '/auth', icon: '👤', label: 'Connexion' },
+      { href: '/consultant', icon: '🤖', label: 'Consultant IA' },
       { href: '/onboarding', icon: '🎯', label: 'Guide démarrage' },
     ]
   },

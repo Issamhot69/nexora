@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const { prompt, template, color, bgImage, generatedBgCSS, logo } = await req.json()
+  const { prompt, template, color, bgImage, generatedBgCSS, logo, userPhotos } = await req.json()
+  const hasUserPhotos = userPhotos && userPhotos.length > 0
 
   // Photos Unsplash par catégorie
   const photos: Record<string, string[]> = {
@@ -61,9 +62,9 @@ export async function POST(req: NextRequest) {
   }
 
   const templatePhotos = photos[template] || photos.restaurant
-  const heroPhoto = bgImage || templatePhotos[0]
-  const photo1 = templatePhotos[1] || templatePhotos[0]
-  const photo2 = templatePhotos[2] || templatePhotos[0]
+  const heroPhoto = bgImage || (hasUserPhotos ? userPhotos[0] : templatePhotos[0])
+  const photo1 = hasUserPhotos ? (userPhotos[1] || userPhotos[0]) : (templatePhotos[1] || templatePhotos[0])
+  const photo2 = hasUserPhotos ? (userPhotos[2] || userPhotos[0]) : (templatePhotos[2] || templatePhotos[0])
 
   // Groq génère le contenu JSON
   const contentRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -136,12 +137,90 @@ Return ONLY this JSON:
     }
   }
 
+  // Design DNA par secteur
+  const sectorDNA: Record<string, any> = {
+    restaurant: {
+      primaryColor: '#e85d04', secondaryColor: '#f48c06',
+      mood: 'warm, appetizing, cozy',
+      heroStyle: 'full-screen food photo with dark overlay',
+      font: "'Georgia', serif",
+      sections: ['hero', 'about', 'menu', 'gallery', 'testimonials', 'contact'],
+    },
+    medical: {
+      primaryColor: '#0077b6', secondaryColor: '#00b4d8',
+      mood: 'clean, professional, trustworthy',
+      heroStyle: 'light clean with blue accents',
+      font: "'Helvetica Neue', sans-serif",
+      sections: ['hero', 'services', 'doctors', 'appointments', 'testimonials', 'contact'],
+    },
+    fitness: {
+      primaryColor: '#2dc653', secondaryColor: '#80b918',
+      mood: 'energetic, powerful, motivating',
+      heroStyle: 'dark dramatic with green highlights',
+      font: "'Impact', sans-serif",
+      sections: ['hero', 'programs', 'trainers', 'pricing', 'testimonials', 'contact'],
+    },
+    beauty: {
+      primaryColor: '#e63946', secondaryColor: '#f4a0a8',
+      mood: 'elegant, feminine, luxurious',
+      heroStyle: 'soft pink with elegant typography',
+      font: "'Playfair Display', serif",
+      sections: ['hero', 'services', 'gallery', 'team', 'booking', 'contact'],
+    },
+    law: {
+      primaryColor: '#1a1a2e', secondaryColor: '#c9a84c',
+      mood: 'serious, authoritative, trustworthy',
+      heroStyle: 'dark navy with gold accents',
+      font: "'Times New Roman', serif",
+      sections: ['hero', 'practice', 'team', 'cases', 'testimonials', 'contact'],
+    },
+    realestate: {
+      primaryColor: '#2b4590', secondaryColor: '#4a90d9',
+      mood: 'professional, luxurious, trustworthy',
+      heroStyle: 'property photos with blue overlay',
+      font: "'Helvetica Neue', sans-serif",
+      sections: ['hero', 'properties', 'services', 'agents', 'testimonials', 'contact'],
+    },
+    education: {
+      primaryColor: '#7209b7', secondaryColor: '#3a0ca3',
+      mood: 'inspiring, modern, academic',
+      heroStyle: 'gradient purple with motivational text',
+      font: "'Open Sans', sans-serif",
+      sections: ['hero', 'courses', 'instructors', 'results', 'testimonials', 'contact'],
+    },
+    travel: {
+      primaryColor: '#0096c7', secondaryColor: '#48cae4',
+      mood: 'adventurous, exciting, wanderlust',
+      heroStyle: 'full-screen destination photo',
+      font: "'Raleway', sans-serif",
+      sections: ['hero', 'destinations', 'packages', 'gallery', 'testimonials', 'contact'],
+    },
+    ecommerce: {
+      primaryColor: '#ff6b6b', secondaryColor: '#ffa500',
+      mood: 'energetic, commercial, trendy',
+      heroStyle: 'product showcase with bright colors',
+      font: "'Poppins', sans-serif",
+      sections: ['hero', 'products', 'features', 'deals', 'testimonials', 'contact'],
+    },
+    startup: {
+      primaryColor: '#6366f1', secondaryColor: '#8b5cf6',
+      mood: 'innovative, modern, tech-forward',
+      heroStyle: 'gradient with floating elements',
+      font: "'Inter', sans-serif",
+      sections: ['hero', 'features', 'pricing', 'team', 'testimonials', 'contact'],
+    },
+  }
+
+  const dna = sectorDNA[template] || sectorDNA.startup
+  const sectorPrimary = dna.primaryColor
+  const sectorSecondary = dna.secondaryColor
+
   const isDark = color !== 'light'
   const bg = isDark ? '#0f0f0f' : '#ffffff'
   const textColor = isDark ? '#ffffff' : '#1a1a1a'
   const cardBg = isDark ? 'rgba(255,255,255,0.05)' : '#f8f9fa'
-  const primary = c.color1 || '#6366f1'
-  const secondary = c.color2 || '#8b5cf6'
+  const primary = c.color1 || sectorPrimary
+  const secondary = c.color2 || sectorSecondary
 
   const html = `<!DOCTYPE html>
 <html lang="fr">

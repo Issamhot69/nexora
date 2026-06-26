@@ -68,6 +68,13 @@ export default function CreateSite() {
   const [bgImage, setBgImage] = useState('none')
   const [darkMode, setDarkMode] = useState(true)
   const [logo, setLogo] = useState(null as string | null)
+  const [photos, setPhotos] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('nexoro_site_photos')
+      return saved ? JSON.parse(saved) : []
+    }
+    return []
+  })
   const [currency, setCurrency] = useState('MAD')
   const [html, setHtml] = useState('')
   const [generating, setGenerating] = useState(false)
@@ -84,6 +91,31 @@ export default function CreateSite() {
     reader.onload = () => setLogo(reader.result as string)
     reader.readAsDataURL(file)
   }
+
+  const handlePhotosUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    files.slice(0, 10 - photos.length).forEach(file => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        setPhotos(prev => {
+          const updated = [...prev, reader.result as string].slice(0, 10)
+          localStorage.setItem('nexoro_site_photos', JSON.stringify(updated))
+          return updated
+        })
+      }
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const removePhoto = (index: number) => {
+    setPhotos(prev => {
+      const updated = prev.filter((_, i) => i !== index)
+      localStorage.setItem('nexoro_site_photos', JSON.stringify(updated))
+      return updated
+    })
+  }
+
+
 
   const buildPrompt = () => {
     if (mode === 'ai') return aiPrompt
@@ -120,6 +152,7 @@ IMPORTANT: Use ALL the real information above in the website. Use real phone, em
           color: darkMode ? 'dark' : 'light',
           bgImage: selectedBg.url,
           logo,
+          userPhotos: photos,
         })
       })
       const data = await res.json()
@@ -312,6 +345,44 @@ IMPORTANT: Use ALL the real information above in the website. Use real phone, em
                 <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
                 {logo && <button onClick={e => { e.preventDefault(); setLogo(null) }} className="ml-auto text-red-400 text-xs">🗑️ Supprimer</button>}
               </label>
+
+              <div className="mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="font-semibold text-sm">📸 Photos <span className="text-gray-500 font-normal">({photos.length}/10)</span></p>
+                  <div className="flex gap-2">
+                    <button onClick={() => {
+                      const saved = JSON.parse(localStorage.getItem('nexoro_site_photos') || '[]')
+                      if (saved.length > 0) {
+                        setPhotos(saved)
+                        alert('✅ ' + saved.length + ' photos chargées depuis Image Generator !')
+                      } else {
+                        alert('Aucune photo sauvegardée. Va dans Images IA pour en générer !')
+                      }
+                    }} className="text-xs bg-green-600 hover:bg-green-500 text-white px-3 py-1.5 rounded-lg transition-all">
+                      📥 Charger mes photos IA
+                    </button>
+                    <a href="/imagegen" target="_blank" className="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg transition-all">
+                      🎨 Générer avec IA →
+                    </a>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mb-2">Génère tes photos avec IA puis reviens les uploader ici</p>
+                <div className="grid grid-cols-5 gap-2">
+                  {photos.map((photo, i) => (
+                    <div key={i} className="relative aspect-square rounded-xl overflow-hidden">
+                      <img src={photo} alt="" className="w-full h-full object-cover" />
+                      <button onClick={() => removePhoto(i)} className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">x</button>
+                    </div>
+                  ))}
+                  {photos.length < 10 && (
+                    <label className="aspect-square rounded-xl border-2 border-dashed border-gray-600 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 bg-gray-800">
+                      <span className="text-2xl text-gray-400">+</span>
+                      <span className="text-xs text-gray-500">Photo</span>
+                      <input type="file" accept="image/*" multiple className="hidden" onChange={handlePhotosUpload} />
+                    </label>
+                  )}
+                </div>
+              </div>
             </div>
           </>
         )}
